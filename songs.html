@@ -6,12 +6,37 @@
     <link rel="icon" href="9869.jpg" type="image/x-icon">
     <title>Προτάσεις Τραγουδιών</title>
     <style>
-        body { font-family: Aptos; max-width: 600px; margin: auto; padding: 20px; background-image: url('9869.jpg'); background-size:cover; }
-        #songInput { width: 80%; padding: 10px; background-color: aliceblue; }
-        #addBtn { padding: 10px; }
-        .song-item { padding: 8px; background: #f1f1f1; margin-top: 10px; border-radius: 5px; }
-        h1 {background-color: rgba(255,255,255,0.2); color:aliceblue; border-radius: 15px; text-align: center; }
-        h2 {text-align: center; background-color: rgba(255,255,255,0.2); color:aliceblue; }
+        body { 
+        font-family: Aptos; 
+        max-width: 100%;
+         margin: auto; 
+         padding: 20px; 
+         background-image: url('9869.jpg');
+          background-size:cover; 
+        }
+        
+        #songInput { width: 80%; 
+        padding: 10px; 
+        background-color: aliceblue;
+         }
+        #addBtn { 
+        padding: 10px; 
+        }
+        .song-item { padding: 8px; 
+        background: #f1f1f1;
+         margin-top: 10px; 
+         border-radius: 5px; 
+         }
+
+        h1 {background-color: rgba(255,255,255,0.2);
+         color:aliceblue; 
+         border-radius: 15px; 
+         text-align: center; 
+         }
+        h2 {text-align: center; 
+        background-color: rgba(255,255,255,0.2); 
+        color:aliceblue; 
+        }
         song-item { 
             padding: 10px; 
             background: #f1f1f1; 
@@ -44,56 +69,68 @@
 </head>
 <body>
     <h1>Φέτος προτείνετε εσείς τραγούδια!</h1>
-    <input type="text" id="songInput" placeholder="Π.χ. Giorgos Mazonakis - To Gucci φόρεμα">
-    <button id="addBtn">Προσθήκη</button>
-    <br><br><br><br>
+    <input type="text" id="songInput" placeholder="Βάλε τραγούδι">
+    <button id="addBtn">Add</button>
+    <button id="saveBtn">Save</button>
 
-    <h2>Λίστα αναμονής:</h2>
-    <div id="songList"></div>
-
-    <script>
-    const input = document.getElementById('songInput');
-    const list = document.getElementById('songList');
-    const deleteAllBtn = document.getElementById('deleteAll'); // το κουμπί delete all
-
+    <div id="list"></div>
     
-    document.getElementById('addBtn').onclick = () => {
-        if (input.value.trim() === "") return;
+ <script>
+    const input = document.getElementById("songInput");
+    const addBtn = document.getElementById("addBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const list = document.getElementById("list");
 
-        const div = document.createElement("div");
-        div.className = "song-item";
 
-       
-        const text = document.createElement("span");
-        text.textContent = input.value;
+  window.onload = () => {
+    const savedSongs = JSON.parse(localStorage.getItem("songs")) || [];
+    savedSongs.forEach(song => addSongToList(song));
+  };
 
-        
-        const delBtn = document.createElement("button");
-        delBtn.textContent = "Delete";
-        delBtn.className = "delete-btn";
+  addBtn.onclick = () => {
+    if (input.value.trim() === "") return;
+    addSongToList(input.value);
+    input.value = "";
+  };
 
-        delBtn.onclick = () => {
-            div.remove(); 
-        };
+  saveBtn.onclick = () => {
+    const songs = [];
+    document.querySelectorAll(".song-item span").forEach(span => {
+        songs.push(span.textContent);
+    });
 
-        
-        div.appendChild(text);
-        div.appendChild(delBtn);
+    localStorage.setItem("songs", JSON.stringify(songs));
+    alert("Αποθηκεύτηκαν!");
+  };
 
-        
-        list.appendChild(div);
+  function addSongToList(songName) {
+    const div = document.createElement("div");
+    div.className = "song-item";
 
-        input.value = "";
+    const text = document.createElement("span");
+    text.textContent = songName;
+
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "Delete";
+    delBtn.className = "delete-btn";
+
+    delBtn.onclick = () => {
+        div.remove();
     };
 
-   
-    deleteAllBtn.onclick = () => {
-        list.innerHTML = "";
-    };
-</script>
+    div.appendChild(text);
+    div.appendChild(delBtn);
+    list.appendChild(div);
+  }
+
+
+
+ </script>
 
 
 
 
 </body>
 </html>
+
+
